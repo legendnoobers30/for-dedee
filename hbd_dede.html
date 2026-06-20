@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday, Dedee Sayang</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ━━ PALETTE UNGU PASTEL VIOLET ━━━━━━━━━━━━━━━━━━━━━ */
+:root{
+  --bg:        #710193;   /* deep violet-night — background utama */
+  --bg2:       #A45EE5;   /* sedikit lebih terang untuk variasi */
+  --violet:    #c4aaee;   /* ungu pastel utama — teks aksen */
+  --violet-lt: #ddd0f7;   /* ungu pastel terang — eyebrow, highlight */
+  --violet-dim:#8b6dc4;   /* ungu medium — border, secondary */
+  --lavender:  #ede8fb;   /* hampir putih ungu — teks quote */
+  --blush-v:   #e8c8f0;   /* pink-ungu — em, italic */
+  --gold-v:    #d4b8f0;   /* "gold" ungu pastel — signature, angka */
+  --white70:   rgba(255,255,255,0.70);
+  --white45:   rgba(255,255,255,0.45);
+  --white20:   rgba(255,255,255,0.20);
+  --white08:   rgba(255,255,255,0.08);
+  --border:    rgba(196,170,238,0.18);
+  --border-lt: rgba(196,170,238,0.30);
+}
+
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:#fff;
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+}
+
+/* ━━ FLOATING PETALS CANVAS ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#petal-canvas{
+  position:fixed;inset:0;
+  z-index:0;
+  pointer-events:none;
+  width:100%;height:100%;
+}
+
+/* ━━ PROGRESS BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#progress-bar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:var(--violet);
+  z-index:999;transition:width 0.1s linear;
+}
+
+/* ━━ AUDIO BTN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#audio-btn{
+  position:fixed;top:20px;right:20px;z-index:998;
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--border-lt);
+  background:rgba(26,18,40,0.55);
+  color:var(--violet-lt);font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+  transition:border-color .3s,color .3s;
+}
+#audio-btn:hover{border-color:var(--violet);color:#fff}
+
+/* ━━ SCENE BASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.scene{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:80px 24px;text-align:center;
+}
+
+/* ━━ SCENE 0 — OPENING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#scene-0{min-height:100vh}
+
+/* Soft radial glow di tengah opening */
+#scene-0::before{
+  content:'';
+  position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 48%,
+    rgba(160,100,230,0.13) 0%,
+    rgba(100,60,180,0.06) 50%,
+    transparent 100%);
+  pointer-events:none;
+}
+
+.opening-name{
+  position:relative;z-index:1;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,12vw,90px);
+  font-weight:300;letter-spacing:.13em;
+  color:#fff;line-height:1;
+  opacity:0;transform:translateY(22px);
+  transition:opacity 1.5s ease,transform 1.5s ease;
+  text-shadow:0 0 60px rgba(196,170,238,0.35),
+              0 0 120px rgba(160,100,230,0.15);
+}
+.opening-name.visible{opacity:1;transform:translateY(0)}
+
+.opening-sub{
+  position:relative;z-index:1;
+  margin-top:24px;font-size:34px;
+  letter-spacing:.32em;text-transform:uppercase;
+  color: #FFF;
+  opacity:0;transition:opacity 1.4s ease 1.1s;
+}
+.opening-sub.visible{opacity:1}
+
+.scroll-hint{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);z-index:1;
+  font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--white45);
+  animation:blink-hint 2.2s ease 2.6s infinite;
+}
+@keyframes blink-hint{0%,100%{opacity:0}50%{opacity:.7}}
+
+/* scroll arrow */
+.scroll-arrow{
+  display:block;margin:10px auto 0;
+  width:16px;height:16px;
+  border-right:1px solid var(--white45);
+  border-bottom:1px solid var(--white45);
+  transform:rotate(45deg);
+  animation:arrow-bob 1.8s ease 2.6s infinite;
+}
+@keyframes arrow-bob{0%,100%{transform:rotate(45deg) translate(0,0);opacity:.3}50%{transform:rotate(45deg) translate(3px,3px);opacity:.8}}
+
+/* ━━ REVEAL ANIMATIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.reveal{
+  opacity:0;transform:translateY(38px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-48px);transition:opacity .9s ease,transform .9s ease}
+.reveal-left.in{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(48px);transition:opacity .9s ease,transform .9s ease}
+.reveal-right.in{opacity:1;transform:translateX(0)}
+
+/* ━━ TYPOGRAPHY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.eyebrow{
+  font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--violet-lt);margin-bottom:14px;
+}
+
+.hl{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(34px,7vw,62px);
+  font-weight:300;line-height:1.15;color:#fff;
+}
+.hl em{font-style:italic;color:var(--blush-v)}
+
+.body-text{
+  font-size:15px;line-height:1.88;
+  color:var(--white70);max-width:480px;margin:0 auto;
+}
+
+/* thin horizontal divider */
+.h-rule{
+  width:40px;height:1px;
+  background:var(--violet-dim);
+  margin:28px auto;opacity:0;
+  transition:opacity .8s ease;
+}
+.h-rule.in{opacity:1}
+
+/* ━━ SCENE GRADIENT SEPARATORS ━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Setiap scene punya subtle violet glow agar tidak monoton */
+#scene-1{background:transparent}
+#scene-2{background:transparent}
+#scene-3{background:transparent}
+#scene-4{background:transparent;padding:60px 0}
+#scene-5{background:transparent;position:relative;overflow:hidden}
+#scene-6{min-height:70vh;background:transparent;padding-bottom:80px}
+
+/* Soft divider strip antara scene */
+.scene-sep{
+  position:relative;z-index:1;
+  height:1px;max-width:280px;margin:0 auto;
+  background:linear-gradient(to right,transparent,var(--violet-dim),transparent);
+}
+
+/* ━━ POLAROID ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.polaroid-wrap{
+  display:flex;gap:20px;justify-content:center;
+  flex-wrap:wrap;margin-top:44px;
+}
+.polaroid{
+  background:#faf7ff;
+  padding:12px 12px 40px;width:196px;
+  box-shadow:0 8px 40px rgba(100,50,180,0.35),
+             0 2px 8px rgba(0,0,0,0.3);
+  opacity:0;transition:opacity .75s ease,transform .75s ease;
+}
+.polaroid:nth-child(1){transform:rotate(-3deg) translateY(28px);transition-delay:.1s}
+.polaroid:nth-child(2){transform:rotate(1.8deg) translateY(28px);transition-delay:.3s}
+.polaroid:nth-child(3){transform:rotate(-1.2deg) translateY(28px);transition-delay:.5s}
+.polaroid.in:nth-child(1){opacity:1;transform:rotate(-3deg) translateY(0)}
+.polaroid.in:nth-child(2){opacity:1;transform:rotate(1.8deg) translateY(0)}
+.polaroid.in:nth-child(3){opacity:1;transform:rotate(-1.2deg) translateY(0)}
+
+.polaroid-img{
+  width:100%;aspect-ratio:1;
+  overflow:hidden;display:flex;
+  align-items:center;justify-content:center;
+}
+.polaroid-img img{width:100%;height:100%;object-fit:cover;display:block}
+.polaroid-placeholder{
+  width:100%;height:100%;
+  background:#ede8f7;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:8px;
+  color:#9b85c4;font-size:11px;letter-spacing:.1em;
+}
+.polaroid-placeholder svg{width:30px;height:30px;opacity:.45}
+.polaroid-caption{
+  padding-top:10px;font-size:12px;color:#7a6a9a;
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+}
+
+/* ━━ MEMORY GRID ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.memory-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;max-width:560px;width:100%;
+  margin-top:48px;
+  border:1px solid var(--border);
+  background:var(--border);
+}
+.memory-cell{
+  padding:28px 22px;
+  background:rgba(26,18,40,.85);
+  text-align:left;
+  opacity:0;transform:scale(.95);
+  transition:opacity .65s ease,transform .65s ease;
+}
+.memory-cell.in{opacity:1;transform:scale(1)}
+.memory-cell:nth-child(1){transition-delay:0s}
+.memory-cell:nth-child(2){transition-delay:.15s}
+.memory-cell:nth-child(3){transition-delay:.3s}
+.memory-cell:nth-child(4){transition-delay:.45s}
+
+.memory-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;color:var(--gold-v);
+  line-height:1;margin-bottom:6px;
+}
+.memory-label{
+  font-size:11px;color:var(--white45);
+  letter-spacing:.12em;text-transform:uppercase;
+}
+.memory-detail{
+  font-size:13px;color:var(--white70);
+  margin-top:5px;font-style:italic;
+  font-family:'Cormorant Garamond',serif;
+}
+
+/* ━━ REASONS LIST ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.reasons-list{
+  list-style:none;max-width:500px;
+  width:100%;margin-top:48px;text-align:left;
+}
+.reason-item{
+  display:flex;align-items:baseline;gap:18px;
+  padding:18px 0;
+  border-bottom:1px solid var(--border);
+  opacity:0;transform:translateX(-28px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reason-item.in{opacity:1;transform:translateX(0)}
+.reason-item:nth-child(1){transition-delay:0s}
+.reason-item:nth-child(2){transition-delay:.12s}
+.reason-item:nth-child(3){transition-delay:.24s}
+.reason-item:nth-child(4){transition-delay:.36s}
+.reason-item:nth-child(5){transition-delay:.48s}
+.reason-item:nth-child(6){transition-delay:.60s}
+.reason-item:nth-child(7){transition-delay:.72s}
+
+.reason-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;color:var(--violet);
+  min-width:28px;line-height:1;
+}
+.reason-text{font-size:15px;color:var(--white70);line-height:1.6}
+
+/* ━━ BIG PHOTO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.big-photo-wrap{
+  width:min(500px,92vw);aspect-ratio:4/5;
+  overflow:hidden;position:relative;
+  box-shadow:0 0 0 1px var(--border),
+             0 20px 60px rgba(100,50,200,0.3);
+  opacity:0;transform:scale(.93);
+  transition:opacity 1.1s ease,transform 1.1s ease;
+}
+.big-photo-wrap.in{opacity:1;transform:scale(1)}
+.big-photo-wrap img{width:100%;height:100%;object-fit:cover}
+.big-photo-placeholder{
+  width:100%;height:100%;
+  background:rgba(50,30,80,.6);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+  color:var(--white20);font-size:12px;
+  letter-spacing:.15em;text-transform:uppercase;
+}
+.big-photo-placeholder svg{width:48px;height:48px;opacity:.3}
+
+.big-photo-caption{
+  margin-top:26px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,4.5vw,34px);
+  font-style:italic;color:var(--blush-v);max-width:420px;
+}
+
+/* ━━ QUOTE INTERLUDE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.quote-scene{
+  min-height:60vh;position:relative;z-index:1;
+  display:flex;align-items:center;justify-content:center;
+  padding:80px 32px;text-align:center;
+}
+/* subtle glow pulse di belakang quote */
+.quote-scene::before{
+  content:'';position:absolute;
+  width:400px;height:300px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(140,90,220,0.1) 0%,transparent 70%);
+  pointer-events:none;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+}
+
+.quote-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,5vw,46px);
+  font-style:italic;font-weight:300;
+  line-height:1.45;color:var(--lavender);max-width:600px;
+}
+.quote-text .line{
+  display:block;opacity:0;transform:translateY(18px);
+  transition:opacity .85s ease,transform .85s ease;
+}
+.quote-text .line:nth-child(2){transition-delay:.2s}
+.quote-text .line:nth-child(3){transition-delay:.4s}
+.quote-text .line.in{opacity:1;transform:translateY(0)}
+
+.quote-source{
+  margin-top:22px;font-size:12px;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--violet-lt);opacity:0;
+  transition:opacity .8s ease .65s;
+}
+.quote-source.in{opacity:1}
+
+/* ━━ KLIMAKS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#confetti-canvas{
+  position:absolute;inset:0;
+  pointer-events:none;z-index:0;
+  width:100%;height:100%;
+}
+.klimaks-inner{position:relative;z-index:1}
+
+/* Glow aura di scene klimaks */
+#scene-5::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 70% at 50% 50%,
+    rgba(160,100,230,0.16) 0%,
+    rgba(100,50,200,0.06) 55%,
+    transparent 100%);
+  pointer-events:none;
+}
+
+.hbd-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,10vw,88px);
+  font-weight:300;line-height:1.1;color:#fff;
+  opacity:0;transform:scale(.86);
+  transition:opacity 1.2s ease,transform 1.2s ease;
+  text-shadow:0 0 80px rgba(196,170,238,0.4);
+}
+.hbd-text.in{opacity:1;transform:scale(1)}
+.hbd-text span{color:var(--blush-v);font-style:italic}
+
+.hbd-message{
+  margin-top:28px;font-size:16px;line-height:1.92;
+  color:var(--white70);max-width:520px;
+  opacity:0;transition:opacity 1s ease .6s;
+}
+.hbd-message.in{opacity:1}
+
+.hbd-sign{
+  margin-top:40px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-style:italic;
+  color:var(--gold-v);
+  opacity:0;transition:opacity 1s ease 1.2s;
+}
+.hbd-sign.in{opacity:1}
+
+/* ━━ ENDING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.ending-photo-wrap{
+  width:min(280px,78vw);aspect-ratio:1;
+  border-radius:50%;overflow:hidden;
+  border:1px solid var(--border-lt);
+  box-shadow:0 0 0 6px rgba(196,170,238,0.06),
+             0 0 60px rgba(140,90,220,0.2);
+  margin:0 auto 36px;
+  opacity:0;transition:opacity 1.2s ease;
+}
+.ending-photo-wrap.in{opacity:1}
+.ending-photo-wrap img{width:100%;height:100%;object-fit:cover}
+.ending-placeholder-circle{
+  width:100%;height:100%;
+  background:rgba(50,30,80,.5);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:10px;
+  color:var(--white20);font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;
+}
+.ending-placeholder-circle svg{width:40px;height:40px;opacity:.25}
+
+.ending-tagline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,6vw,46px);
+  font-style:italic;font-weight:300;color:#fff;
+  margin-bottom:12px;opacity:0;
+  transition:opacity 1s ease .3s;
+}
+.ending-tagline.in{opacity:1}
+
+.ending-sub{
+  font-size:12px;color:var(--white45);
+  letter-spacing:.14em;opacity:0;
+  transition:opacity 1s ease .6s;
+}
+.ending-sub.in{opacity:1}
+
+.replay-btn{
+  margin-top:48px;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--white45);background:transparent;
+  border:1px solid var(--border-lt);
+  padding:13px 30px;cursor:pointer;
+  opacity:0;
+  transition:color .3s,border-color .3s,opacity 1s ease .9s;
+}
+.replay-btn.in{opacity:1}
+.replay-btn:hover{color:#fff;border-color:var(--violet)}
+
+/* ━━ REDUCED MOTION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal-left,.reveal-right,
+  .polaroid,.memory-cell,.reason-item,
+  .big-photo-wrap,.hbd-text,.hbd-message,.hbd-sign,
+  .ending-photo-wrap,.ending-tagline,.ending-sub,
+  .replay-btn,.quote-text .line,.quote-source,.h-rule{
+    opacity:1!important;transform:none!important
+  }
+}
+
+@media(max-width:500px){
+  .memory-grid{grid-template-columns:1fr}
+  .polaroid{width:160px}
+}
+
+#birthday-message{
+  max-width:550px;
+  min-height:180px;
+  white-space:pre-line;
+  line-height:2;
+}
+
+#birthday-message::after{
+  content:"|";
+  margin-left:3px;
+  color:var(--violet);
+  animation:blink .8s infinite;
+}
+
+@keyframes blink{
+  50%{
+    opacity:0;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Floating petals & hearts canvas -->
+<canvas id="petal-canvas"></canvas>
+
+<button id="audio-btn" title="Toggle musik" aria-label="Toggle musik">♪</button>
+
+<audio id="bg-music" loop>
+  <!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  GANTI src dengan path file musik kamu              ║
+  ║  Contoh: src="music/lagu.mp3"                       ║
+  ║  Letakkan file mp3 satu folder dengan HTML ini      ║
+  ╚══════════════════════════════════════════════════════╝
+  -->
+  <source src="./backsound.mp3" type="audio/mpeg"/>
+</audio>
+
+<!-- ══ SCENE 0 — OPENING ══════════════════════════════ -->
+<section id="scene-0" class="scene">
+  <div class="opening-name" id="opening-name">
+    <!--
+    ╔══════════════════════════════════════════════════╗
+    ║  GANTI "Nama Dia" dengan nama pacar kamu         ║
+    ╚══════════════════════════════════════════════════╝
+    -->
+    Happy Birthday
+  </div>
+  <div class="opening-sub" id="opening-sub">dedee sayanggkuu</div>
+  <p class="scroll-hint">
+    scroll
+    <span class="scroll-arrow"></span>
+  </p>
+</section>
+
+<!-- ══ SCENE 1 — BIRTHDAY MESSAGE ═══════════════════ -->
+<section id="scene-birthday" class="scene">
+
+  <h2 class="hl reveal" style="transition-delay:.2s">
+    a little letter<br/>
+    on your special day
+  </h2>
+  <br>
+  <br>
+
+  <div class="hl reveal" style="transition-delay:.2s"></div>
+
+  <p id="birthday-message" class="body-text"></p>
+</section>
+
+<!-- ══ SCENE 1 — PERTAMA KETEMU ══════════════════════ -->
+<section id="scene-1" class="scene">
+  <p class="eyebrow reveal">awal dari segalanya</p>
+  <h2 class="hl reveal" style="transition-delay:.1s">
+    <!--
+    GANTI teks di bawah dengan cerita pertama kali ketemu.
+    Contoh: "waktu pertama kali aku <em>melihatmu</em>..."
+    -->
+    waktu pertama kali <br/><em>kita bertemu</em>...
+  </h2>
+  <div class="h-rule reveal" style="transition-delay:.2s"></div>
+  <p class="body-text reveal" style="transition-delay:.25s">
+    <!--
+    GANTI dengan cerita singkat pertama ketemu.
+    Tulis seperti kamu bercerita langsung ke dia.
+    -->
+    Semua bermula saat kita bertemu di roblox, hanya dari candaan, saling mengenal lebih dalam, sampai akhirnya kita pacaran di tanggal 10 Oktober 2026, banyak hal sudah kita lalui bersama, semua rasa senang dan sedih, salah paham dan komunikasi yang beragam kita lalui, sampai pada akhirnya setelah 4 bulan menunggu kita akhirnya bisa bertemu secara langsung, terimakasih sudah mau berjuang untuk aku dan hubungan kita, aku sangat sangat bersyukur dan beruntung bisa milikin dedee dan jalanin hubungan cama dedee
+  </p>
+
+  <div class="polaroid-wrap">
+    <!-- ── POLAROID 1 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-1">
+      <div class="polaroid-img">
+        <!--
+        GANTI FOTO: hapus div.polaroid-placeholder, tulis:
+        <img src="foto/foto1.jpg" alt="momen pertama" />
+        Rasio 1:1 (persegi) paling bagus.
+        -->
+        <img src="foto/met1.jpg" />
+      </div>
+      <p class="polaroid-caption">
+        <!-- GANTI: "hari itu, Juni 2023" -->
+        Saat itu kita pertama kali naik gunung bareng
+      </p>
+    </div>
+
+    <!-- ── POLAROID 2 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-2">
+      <div class="polaroid-img">
+        <img src="foto/chat.jpg" />
+      </div>
+      <p class="polaroid-caption">chat pertama kita di discord</p>
+    </div>
+
+    <!-- ── POLAROID 3 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-3">
+      <div class="polaroid-img">
+        <img src="foto/pap.jpg" />
+      </div>
+      <p class="polaroid-caption">pap pertama dari dedee</p>
+    </div>
+  </div>
+</section>
+
+<div class="scene-sep"></div>
+
+<!-- ══ QUOTE INTERLUDE 1 ══════════════════════════════ -->
+<div class="quote-scene" id="quote-1">
+  <div>
+    <p class="quote-text">
+      <!--
+      GANTI dengan quote atau kata-kata kamu sendiri.
+      Pecah jadi beberapa .line agar animasinya bertahap.
+      -->
+      <span class="line">"kamu bukan sekadar seseorang</span>
+      <span class="line">yang datang dalam hidupku —</span>
+      <span class="line">kamu adalah tujuan <em> dan alasan dihidupku</em>"</span>
+    </p>
+  </div>
+</div>
+
+<div class="scene-sep"></div>
+
+<div class="polaroid-wrap">
+    <!-- ── POLAROID 1 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-1">
+      <div class="polaroid-img">
+        <!--
+        GANTI FOTO: hapus div.polaroid-placeholder, tulis:
+        <img src="foto/foto1.jpg" alt="momen pertama" />
+        Rasio 1:1 (persegi) paling bagus.
+        -->
+        <img src="foto/cantik.jpeg" />
+      </div>
+      <p class="polaroid-caption">
+        <!-- GANTI: "hari itu, Juni 2023" -->
+        Cantikk bangett ciii
+      </p>
+    </div>
+
+    <!-- ── POLAROID 2 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-2">
+      <div class="polaroid-img">
+        <img src="foto/box.jpeg" />
+      </div>
+      <p class="polaroid-caption">pertama kali kita foto bareng</p>
+    </div>
+
+    <!-- ── POLAROID 3 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-3">
+      <div class="polaroid-img">
+        <img src="foto/ps.jpeg" />
+      </div>
+      <p class="polaroid-caption">ini hari valentine</p>
+    </div>
+  </div>
+
+<div class="polaroid-wrap">
+    <!-- ── POLAROID 1 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-1">
+      <div class="polaroid-img">
+        <!--
+        GANTI FOTO: hapus div.polaroid-placeholder, tulis:
+        <img src="foto/foto1.jpg" alt="momen pertama" />
+        Rasio 1:1 (persegi) paling bagus.
+        -->
+        <img src="foto/bukber.jpeg" />
+      </div>
+      <p class="polaroid-caption">
+        <!-- GANTI: "hari itu, Juni 2023" -->
+        pas kita bukber sama keluarga dedee
+      </p>
+    </div>
+
+    <!-- ── POLAROID 2 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-2">
+      <div class="polaroid-img">
+        <img src="foto/ikan.jpeg" />
+      </div>
+      <p class="polaroid-caption">saat kita ke jakarta aquarium</p>
+    </div>
+
+    <!-- ── POLAROID 3 ──────────────────────────────── -->
+    <div class="polaroid" id="pol-3">
+      <div class="polaroid-img">
+        <img src="foto/puncak.jpeg" />
+      </div>
+      <p class="polaroid-caption">pas kita di sentul</p>
+    </div>
+  </div>
+
+
+
+<div class="scene-sep"></div>
+
+<!-- ══ SCENE 3 — ALASAN SAYANG ═══════════════════════ -->
+<section id="scene-3" class="scene">
+  <p class="eyebrow reveal">hal-hal yang aku cintai dari kamu</p>
+  <h2 class="hl reveal" style="transition-delay:.1s">
+    <em>tujuh</em> dari sejuta<br/>alasan
+  </h2>
+
+  <ul class="reasons-list">
+    <!--
+    GANTI 7 alasan ini dengan alasan kamu sayang dia.
+    Semakin spesifik dan personal, semakin berkesan.
+    Contoh yang bagus: "caramu diam-diam memastikan aku sudah makan"
+    bukan sekadar "kamu baik".
+    -->
+    <li class="reason-item" id="ri-0">
+      <span class="reason-n">01</span>
+      <span class="reason-text">Alasan pertama — karena dedee penyayang bangett</span>
+    </li>
+    <li class="reason-item" id="ri-1">
+      <span class="reason-n">02</span>
+      <span class="reason-text">karena dedee selalu support aku</span>
+    </li>
+    <li class="reason-item" id="ri-2">
+      <span class="reason-n">03</span>
+      <span class="reason-text">karena dedee selalu perhatian</span>
+    </li>
+    <li class="reason-item" id="ri-3">
+      <span class="reason-n">04</span>
+      <span class="reason-text">karenaa dede selalu ceriaa</span>
+    </li>
+    <li class="reason-item" id="ri-4">
+      <span class="reason-n">05</span>
+      <span class="reason-text">karena dedee selalu bawa kebahagiaan</span>
+    </li>
+    <li class="reason-item" id="ri-5">
+      <span class="reason-n">06</span>
+      <span class="reason-text">karena dedee cantikkk banettt</span>
+    </li>
+    <li class="reason-item" id="ri-6">
+      <span class="reason-n">07</span>
+      <span class="reason-text">karenaa dedee lucuu imutttt gemeechh banettt</span>
+    </li>
+  </ul>
+</section>
+
+<div class="scene-sep"></div>
+
+<!-- ══ SCENE 4 — FOTO BESAR ══════════════════════════ -->
+<section id="scene-4" class="scene">
+  <div class="big-photo-wrap" id="big-photo">
+    <!--
+    GANTI FOTO: hapus div.big-photo-placeholder, tulis:
+    <img src="foto/foto-utama.jpg" alt="kita berdua" />
+    Rasio 4:5 (portrait) paling bagus.
+    Ini foto paling berkesan kalian — pilih yang terbaik.
+    -->
+    <img src="foto/IMG_8316.JPG"
+  </div>
+  <p class="big-photo-caption reveal">
+    <!--
+    GANTI dengan kalimat romantis tentang foto ini.
+    -->
+    "di sini, waktu berhenti sejenak — dan aku tak ingin bergerak."
+  </p>
+</section>
+
+<div class="scene-sep"></div>
+
+<!-- ══ QUOTE INTERLUDE 2 ══════════════════════════════ -->
+<div class="quote-scene" id="quote-2">
+  <div>
+    <p class="quote-text">
+      <!--
+      GANTI dengan quote kedua — lebih personal, lebih emosional.
+      Ini tepat sebelum klimaks, jadi buat yang paling menyentuh.
+      -->
+      <span class="line">"bertumbuh bersamamu</span>
+      <span class="line">adalah perjalanan terbaik</span>
+      <span class="line">yang pernah kupilih."</span>
+    </p>
+  </div>
+</div>
+
+<!-- ══ SCENE 5 — KLIMAKS ══════════════════════════════ -->
+<section id="scene-5" class="scene">
+  <canvas id="confetti-canvas"></canvas>
+  <div class="klimaks-inner">
+    <p class="eyebrow reveal">hari ini</p>
+    <h1 class="hbd-text" id="hbd-title">
+      Selamat ulang tahun,<br/>
+      <!--
+      GANTI "Sayang" dengan nama atau panggilan spesial kamu untuk dia.
+      -->
+      <span>Sayang.</span>
+    </h1>
+
+  <button class="replay-btn" id="replay-btn"
+    onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    ↑ &nbsp; putar ulang
+  </button>
+</section>
+
+<!-- ══ SCRIPT ══════════════════════════════════════════ -->
+<script>
+(function(){
+
+/* ━━ FALLING HEARTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Semua hati — berbagai ukuran, kecepatan, opacity
+   Warna: palette ungu pastel violet
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const pc = document.getElementById('petal-canvas');
+const px = pc.getContext('2d');
+
+const HEART_COLORS = [
+  '#c4aaee',  // violet pastel utama
+  '#ddd0f7',  // lavender terang
+  '#e8c8f0',  // blush-ungu
+  '#d4b8f0',  // ungu keperakan
+  '#b89fe0',  // medium violet
+  '#f0ebff',  // hampir putih ungu
+  '#a07dd4',  // violet sedikit lebih gelap
+];
+
+function resizePC(){
+  pc.width  = window.innerWidth;
+  pc.height = window.innerHeight;
+}
+resizePC();
+window.addEventListener('resize', resizePC);
+
+function makeHeart(){
+  return {
+    x:        Math.random() * pc.width,
+    y:        -20 - Math.random() * 200,
+    size:     5 + Math.random() * 18,          // ukuran sangat bervariasi: kecil s/d besar
+    speedY:   0.3 + Math.random() * 0.7,       // kecepatan jatuh bervariasi
+    swing:    Math.random() * Math.PI * 2,     // fase oscillasi (gerak kiri-kanan)
+    swingAmp: 0.3 + Math.random() * 0.9,       // seberapa jauh berayun
+    swingSpd: 0.008 + Math.random() * 0.014,   // seberapa cepat berayun
+    rot:      (Math.random() - 0.5) * 0.5,     // sedikit miring, tidak terbalik
+    rotSpd:   (Math.random() - 0.5) * 0.006,   // rotasi sangat lambat
+    alpha:    0.18 + Math.random() * 0.52,     // opacity bervariasi
+    color:    HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)],
+  };
+}
+
+// Gambar hati dengan bezier — proporsional dan indah
+function drawHeart(ctx, x, y, size, rot){
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  // ukuran relatif terhadap size
+  const w = size;
+  const h = size * 0.9;
+  ctx.beginPath();
+  ctx.moveTo(0, h * 0.35);
+  // kurva kiri
+  ctx.bezierCurveTo(-w * 0.05, h * 0.1,  -w * 0.6, -h * 0.15,  -w * 0.5, -h * 0.35);
+  ctx.bezierCurveTo(-w * 0.42, -h * 0.65,  0,        -h * 0.45,   0,        -h * 0.1);
+  // kurva kanan (cermin)
+  ctx.bezierCurveTo( 0,        -h * 0.45,  w * 0.42, -h * 0.65,  w * 0.5,  -h * 0.35);
+  ctx.bezierCurveTo( w * 0.6,  -h * 0.15,  w * 0.05,  h * 0.1,   0,         h * 0.35);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+const POOL = 60;
+const hearts = Array.from({length: POOL}, makeHeart);
+// Sebar posisi Y awal agar langsung terlihat saat halaman dibuka
+hearts.forEach(h => { h.y = Math.random() * pc.height; });
+
+let lastT = 0;
+function animateHearts(t){
+  requestAnimationFrame(animateHearts);
+  const dt = Math.min((t - lastT) / 16, 3);
+  lastT = t;
+
+  px.clearRect(0, 0, pc.width, pc.height);
+
+  hearts.forEach(h => {
+    h.swing += h.swingSpd * dt;
+    h.x     += Math.sin(h.swing) * h.swingAmp * dt;
+    h.y     += h.speedY * dt;
+    h.rot   += h.rotSpd * dt;
+
+    // Reset ke atas jika keluar bawah layar
+    if(h.y > pc.height + 30){
+      Object.assign(h, makeHeart());
+      h.y = -20;
+      h.x = Math.random() * pc.width;
+    }
+
+    px.globalAlpha = h.alpha;
+    px.fillStyle   = h.color;
+    drawHeart(px, h.x, h.y, h.size, h.rot);
+  });
+
+  px.globalAlpha = 1;
+}
+requestAnimationFrame(animateHearts);
+
+/* ━━ PROGRESS BAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  bar.style.width = Math.round(pct * 100) + '%';
+}, {passive:true});
+
+/* ━━ OPENING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('opening-name').classList.add('visible');
+    document.getElementById('opening-sub').classList.add('visible');
+  }, 350);
+});
+
+/* ━━ INTERSECTION OBSERVER HELPER ━━━━━━━━━━━━━━━━━━━ */
+function io(el, cb, thr=0.18){
+  if(!el) return;
+  new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) cb(e.target); });
+  }, {threshold: thr}).observe(el);
+}
+function ioAll(sel, thr=0.18){
+  document.querySelectorAll(sel).forEach(el => {
+    io(el, t => t.classList.add('in'), thr);
+  });
+}
+
+ioAll('.reveal');
+ioAll('.reveal-left');
+ioAll('.reveal-right');
+ioAll('.h-rule', 0.3);
+
+// Polaroids — trigger saat section masuk
+const polSection = document.querySelector('#scene-1');
+const polaroids  = document.querySelectorAll('.polaroid');
+io(polSection, () => polaroids.forEach(p => p.classList.add('in')), 0.15);
+
+// Memory cells
+['mc-0','mc-1','mc-2','mc-3'].forEach(id => {
+  io(document.getElementById(id), t => t.classList.add('in'), 0.15);
+});
+
+// Reason items
+for(let i=0;i<7;i++){
+  io(document.getElementById('ri-'+i), t => t.classList.add('in'), 0.2);
+}
+
+// Big photo
+io(document.getElementById('big-photo'), t => t.classList.add('in'), 0.2);
+
+// Quotes
+['quote-1','quote-2'].forEach(id => {
+  const sec = document.getElementById(id);
+  if(!sec) return;
+  io(sec, () => {
+    sec.querySelectorAll('.line').forEach(l => l.classList.add('in'));
+    const s = sec.querySelector('.quote-source');
+    if(s) s.classList.add('in');
+  }, 0.3);
+});
+
+/* ━━ KLIMAKS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+let confettiFired = false;
+io(document.getElementById('scene-5'), () => {
+  document.getElementById('hbd-title').classList.add('in');
+  document.getElementById('hbd-msg').classList.add('in');
+  document.getElementById('hbd-sign').classList.add('in');
+  if(!confettiFired){ fireConfetti(); confettiFired = true; }
+}, 0.3);
+
+/* ━━ CONFETTI — warna ungu pastel ━━━━━━━━━━━━━━━━━━━ */
+function fireConfetti(){
+  const cc  = document.getElementById('confetti-canvas');
+  if(!cc) return;
+  cc.width  = cc.offsetWidth;
+  cc.height = cc.offsetHeight;
+  const cx  = cc.getContext('2d');
+  // Palette ungu pastel + putih
+  const cols = [
+    '#c4aaee','#ddd0f7','#e8c8f0','#d4b8f0',
+    '#b89fe0','#f0ebff','#a07dd4','#ede8fb','#fff'
+  ];
+  const pieces = Array.from({length:130}, () => ({
+    x:     Math.random() * cc.width,
+    y:     -15 - Math.random() * 180,
+    r:     Math.random() * 7 + 3,
+    color: cols[Math.floor(Math.random() * cols.length)],
+    speed: 1.6 + Math.random() * 2,
+    drift: (Math.random() - 0.5) * 1.2,
+    tilt:  Math.random() * 12 - 6,
+    tiltD: (Math.random() - 0.5) * 0.25,
+    shape: Math.random() < 0.3 ? 'heart' : 'rect', // mix bentuk
+  }));
+  let tick = 0, ang = 0;
+
+  function drawC(){
+    cx.clearRect(0,0,cc.width,cc.height);
+    ang += 0.012; tick++;
+    const fade = Math.max(0, 1 - tick/300);
+    pieces.forEach(p => {
+      p.y    += p.speed;
+      p.x    += p.drift + Math.sin(ang + p.r) * 0.4;
+      p.tilt += p.tiltD;
+      cx.save();
+      cx.globalAlpha = p.r/10 * fade;
+      cx.fillStyle   = p.color;
+      if(p.shape === 'heart'){
+        cx.translate(p.x, p.y);
+        cx.rotate(p.tilt * Math.PI/180);
+        const s = p.r * 0.4;
+        cx.beginPath();
+        cx.moveTo(0, s*0.4);
+        cx.bezierCurveTo(-s*1.1,-s*0.3,-s*1.4,s*0.9,0,s*1.6);
+        cx.bezierCurveTo(s*1.4,s*0.9,s*1.1,-s*0.3,0,s*0.4);
+        cx.closePath();
+        cx.fill();
+      } else {
+        cx.translate(p.x, p.y);
+        cx.rotate(p.tilt * Math.PI/180);
+        cx.fillRect(-p.r/2, -p.r/4, p.r, p.r/2);
+      }
+      cx.restore();
+    });
+    if(tick < 310) requestAnimationFrame(drawC);
+    else cx.clearRect(0,0,cc.width,cc.height);
+  }
+  drawC();
+}
+
+/* ━━ ENDING ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+io(document.getElementById('scene-6'), () => {
+  ['ending-photo','ending-tl','ending-sub','replay-btn']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.classList.add('in');
+    });
+}, 0.2);
+
+/* ━━ AUDIO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const music    = document.getElementById('bg-music');
+const audioBtn = document.getElementById('audio-btn');
+let musicStarted = false, muted = false;
+
+function startMusic(){
+  if(musicStarted) return;
+  music.volume = 0;
+  music.play().then(() => {
+    musicStarted = true;
+    let v = 0;
+    const fi = setInterval(() => {
+      v = Math.min(v + 0.018, 0.42);
+      music.volume = v;
+      if(v >= 0.42) clearInterval(fi);
+    }, 110);
+  }).catch(()=>{});
+}
+
+window.addEventListener('scroll', startMusic, {once:true, passive:true});
+
+audioBtn.addEventListener('click', () => {
+  if(!musicStarted){ startMusic(); audioBtn.textContent='♪'; return; }
+  muted = !muted;
+  music.muted = muted;
+  audioBtn.textContent = muted ? '♩' : '♪';
+});
+
+const birthdayText = `Happy Birthday dedee sayangkuu 💜
+
+Hari ini bukanlah hari biasa, tetapi hari yang sangat spesial karena dunia menjadi lebih indah dengan lahirnya dedee.
+
+Terimakasih sudah lahir ke dunia ini, aku sangat bersyukur bisa ketemu dedee dan bisa jalanin hubungan sampai detik ini
+
+Aku tidak tahu seperti apa hidupku jika tidak pernah bertemu dengan dedee. Yang aku tahu, sejak dedee hadir, hari hari aku dipenuhi dengan warna, banyak tawa yang tercipta, dan banyak hal kecil yang menjadi lebih berarti.
+
+Di hari spesial ini, aku hanya ingin dedee tahu bahwa dedee sangat berharga. Terima kasih karena sudah menjadi diri sendiri, karena sudah hadir dihidupku, dan karena tanpa sadar telah memberi banyak warna dan kebahagian dalam hidupku.
+
+Aku selalu mendoakan yang terbaik buat dedee, semoga dedee selalu bahagia, diberikan kesehatan, ketenangan, keberanian, bisa mencapai cita cita yang di inginkan.
+
+Serta semua hal hal baik baik datang ke deedee, dan apapun yang dedee inginkan bisa tercapai, aamiin.
+
+dan semoga, di antara semua hal indah yang akan datang, aku selalu menjadi salah satu alasan di balik senyummu.
+
+setiap kali kamu merasa lelah, kamu harus selalu ingat bahwa ada seseorang di sini yang akan selalu mendukungmu dan menganggapmu sangat berharga.
+
+selamatt ulang tahunn dedee cayanggkuu 💜`;
+
+const birthdayEl = document.getElementById('birthday-message');
+
+let typingStarted = false;
+
+function typeBirthdayMessage(){
+
+  if(typingStarted) return;
+  typingStarted = true;
+
+  let i = 0;
+
+  function type(){
+    if(i >= birthdayText.length) return;
+
+    birthdayEl.textContent += birthdayText[i];
+
+    let speed = 35;
+
+    if(birthdayText[i] === ',') speed = 200;
+    if(birthdayText[i] === '.') speed = 400;
+    if(birthdayText[i] === '\n') speed = 600;
+
+    i++;
+    setTimeout(type, speed);
+  }
+
+  type();
+}
+
+io(
+  document.getElementById('scene-birthday'),
+  typeBirthdayMessage,
+  0.3
+);
+
+})();
+</script>
+</body>
+</html>
